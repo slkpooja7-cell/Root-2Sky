@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fresher's Road Map • root2sky</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { margin:0; font-family:'Segoe UI',sans-serif; background:#fff9f0; color:#3d2b18; position:relative; overflow-x:hidden; }
+    body::before { content:''; position:fixed; top:0; left:0; right:0; height:180px; background: radial-gradient(circle at 15% 50px, rgba(255,221,141,0.8) 0 80px, transparent 120px), radial-gradient(circle at 85% 70px, rgba(255,234,177,0.7) 0 70px, transparent 110px); pointer-events:none; }
+    body::after { content:''; position:fixed; top:80px; left:0; right:0; height:260px; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 260'><g fill='%23ffd680' opacity='0.2'><path d='M52 34c6-8 22-16 34-11 12 5 22 22 14 34-8 12-25 16-36 10-11-6-17-21-12-33z'/><path d='M218 56c8-6 24-8 32 2 8 10 4 26-6 34-10 8-26 6-34-4-8-10-6-22 8-32z'/><path d='M160 140c10-14 32-20 46-12 14 8 18 30 10 44-8 14-30 18-44 10-14-8-18-26-12-42z'/><path d='M80 190c12-10 28-12 40-4 12 8 16 24 8 36-8 12-28 16-40 8-12-8-16-22-8-40z'/></g><g fill='#ffba72'><path d='M24 90l24-12 18 10-12 18-30-6z'/><path d='M260 120l22-14 16 16-14 22-24-10z'/><path d='M120 200l28-20 18 24-16 20-30-10z'/><path d='M190 72l18-12 14 18-18 16-16-10z'/></g><g fill='#f5c068' stroke='%23f7b24e' stroke-width='3'><circle cx='70' cy='140' r='18'/><circle cx='240' cy='170' r='16'/><path d='M90 56l22-14 20 22-20 24-22-18z'/><path d='M40 210l16-20 22 14-18 24-20-18z'/></g></svg>"); background-repeat: repeat-x; background-size: 320px 260px; opacity:0.35; pointer-events:none; }
+    .roadmap-shell { max-width:980px; margin:32px auto; padding:24px; background:rgba(255,255,255,0.97); border-radius:24px; box-shadow:0 20px 50px rgba(134, 86, 24, 0.08); position:relative; z-index:1; }
+    .roadmap-shell::before { content:''; position:absolute; top:20px; right:20px; width:160px; height:160px; border-radius:50%; background:radial-gradient(circle at 30% 30%, rgba(255,241,171,0.95), transparent 65%); opacity:0.9; pointer-events:none; }
+    .roadmap-shell::after { content:''; position:absolute; bottom:20px; left:20px; width:120px; height:120px; border-radius:30px; background:radial-gradient(circle at 55% 45%, rgba(255,216,124,0.95), transparent 55%); opacity:0.8; pointer-events:none; }
+    .top-links { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:24px; justify-content:center; }
+    .top-links a {
+      color:#ffffff;
+      text-decoration:none;
+      font-weight:900;
+      background: linear-gradient(135deg, #ff6a00, #ffcc00);
+      padding:14px 22px;
+      border-radius:999px;
+      border:2px solid #ffd700;
+      box-shadow: 0 22px 40px rgba(255, 154, 0, 0.22);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      font-size:1.05rem;
+    }
+    .top-links a:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #ff9f24, #ffde5e);
+      box-shadow: 0 26px 50px rgba(255, 166, 0, 0.28);
+    }
+    .roadmap-hero { display:flex; align-items:flex-start; justify-content:space-between; gap:22px; flex-wrap:wrap; }
+    .roadmap-hero h1 { margin:0; font-size:3rem; line-height:1.05; letter-spacing:-0.04em; color:#7a4200; }
+    .roadmap-hero p { margin:12px 0 0; max-width:610px; font-size:1.05rem; line-height:1.8; color:#5c3f24; }
+    .roadmap-note { margin-top:22px; padding:18px 22px; border-radius:18px; background:#fff3d4; border:1px solid #fedca8; color:#6f4a1f; font-weight:700; }
+    .roadmap-list { margin-top:30px; display:grid; gap:18px; }
+    .mind-map { margin-top:30px; display:grid; grid-template-columns:repeat(3, minmax(180px, 1fr)); gap:16px; text-align:center; }
+    .mind-node { border-radius:18px; border:1px solid #f5d195; background:#fff3d4; color:#6b3f0f; padding:20px 18px; font-size:1rem; font-weight:800; cursor:pointer; box-shadow:0 10px 24px rgba(178,109,24,0.1); transition:transform 0.18s ease, background 0.2s ease; }
+    .mind-node:hover, .mind-node.active { transform:translateY(-3px); background:#ffe9a6; }
+    .node-details { margin-top:24px; }
+    .node-panel { display:none; padding:22px 24px; border-radius:22px; background:linear-gradient(180deg,#fff8f0,#fff3e3); border:1px solid #f6d8b4; box-shadow:0 12px 24px rgba(191,125,45,0.08); }
+    .node-panel.active { display:block; }
+    .node-panel h2 { margin:0 0 14px; font-size:1.5rem; color:#7c3b00; }
+    .node-panel p { margin:0 12px 0 0; color:#5e3f24; line-height:1.75; }
+    .node-panel ul { margin:14px 0 0 20px; padding:0; color:#5b4030; line-height:1.8; }
+    .node-panel li { margin-bottom:10px; }
+    .node-panel strong { color:#763f00; }
+    .roadmap-section-title { margin-top:36px; color:#813f0d; font-size:1.35rem; }
+    .tagline { color:#8f5b26; font-size:0.98rem; }
+    @media (max-width:780px) { .roadmap-hero{ flex-direction:column; } .roadmap-shell{ margin:20px 16px; padding:20px; } }
+  </style>
+</head>
+<body>
+  <div class="roadmap-shell">
+    <div class="top-links">
+      <a href="campus life.html">← Campus Life</a>
+    </div>
+    <div class="roadmap-hero">
+      <div>
+        <h1>Freshers Road Map 📍</h1>
+        <p>Start strong with the right learning path. These steps will help you build skills, choose a domain, grow your profile, and become confident in college and career planning. ✨</p>
+      </div>
+    </div>
+
+    <div class="roadmap-note">Tip: Begin with one easy win today — learn Python basics, build a tiny project, and celebrate it! 🚀</div>
+
+    <div class="mind-map">
+      <button class="mind-node" data-target="node1">Start learning programming languages 🚀</button>
+      <button class="mind-node" data-target="node2">Choose a domain 💡</button>
+      <button class="mind-node" data-target="node3">Get certified 🏅</button>
+      <button class="mind-node" data-target="node4">Build your profile 🌐</button>
+      <button class="mind-node" data-target="node5">Boost soft skills 💬</button>
+      <button class="mind-node" data-target="node6">Create projects 🛠️</button>
+    </div>
+
+    <div class="node-details">
+      <article id="node1" class="node-panel">
+        <h2>Start learning programming languages</h2>
+        <p>Begin your coding journey with a strong foundation in programming languages, starting with Python and then exploring more options.</p>
+        <ul>
+          <li><strong>Start with Python</strong> — easy syntax and strong career value.</li>
+          <li>Then learn <strong>JavaScript</strong> for web, or <strong>Java</strong> for apps and backend systems.</li>
+          <li>Practice by building simple scripts, calculators, and mini-tools.</li>
+        </ul>
+      </article>
+      <article id="node2" class="node-panel hidden">
+        <h2>Choose a domain that excites you</h2>
+        <p>Decide which area makes you curious and focus your learning there.</p>
+        <ul>
+          <li><strong>AI/ML</strong> — good for data, prediction, and smart systems.</li>
+          <li><strong>Cyber Security</strong> — learn to protect networks and apps.</li>
+          <li><strong>IoT</strong> — connect devices and create smart products.</li>
+          <li><strong>Cloud Computing</strong> — build and deploy apps on AWS, Azure, or Google Cloud.</li>
+        </ul>
+      </article>
+      <article id="node3" class="node-panel hidden">
+        <h2>Join courses and earn certificates</h2>
+        <p>Structured courses help you learn clearly, and certificates tell others you finished real work.</p>
+        <ul>
+          <li>Take crash courses or beginner certifications in Python, AI, cloud, or security.</li>
+          <li>Use Coursera, Udemy, Campus workshops, or free platform content.</li>
+          <li>Finish each course with a small project to lock in learning.</li>
+        </ul>
+      </article>
+      <article id="node4" class="node-panel hidden">
+        <h2>Build your professional profile</h2>
+        <p>Create a strong online presence and join communities to grow your network.</p>
+        <ul>
+          <li><strong>Build a LinkedIn profile</strong> with your projects, certificates, and skills.</li>
+          <li>Join clubs, developer communities, and college groups.</li>
+          <li>Participate in hackathons and workshops to build experience.</li>
+        </ul>
+      </article>
+      <article id="node5" class="node-panel hidden">
+        <h2>Practice communication and soft skills</h2>
+        <p>Soft skills make your technical knowledge easier to share and more valuable.</p>
+        <ul>
+          <li>Work on your resume, cover letters, and interview answers.</li>
+          <li>Practice presentations, teamwork, and online communication.</li>
+          <li>Learn a foreign language for global opportunities.</li>
+        </ul>
+      </article>
+      <article id="node6" class="node-panel hidden">
+        <h2>Create simple projects</h2>
+        <p>Projects are the best proof of your learning. Keep them simple, but finish them.</p>
+        <ul>
+          <li>Build mini apps, websites, or scripts using Python or JavaScript.</li>
+          <li>Show projects on GitHub and LinkedIn.</li>
+          <li>Use what you learned in your chosen domain to make each project meaningful.</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="roadmap-section-title">Keep it practical 💡</div>
+    <p class="tagline">Your roadmap should be clear, simple, and flexible. Start with one goal, learn step-by-step, and add more as you grow. ✨</p>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const nodes = document.querySelectorAll('.mind-node');
+      const panels = document.querySelectorAll('.node-panel');
+      function activate(id) {
+        nodes.forEach(node => node.classList.toggle('active', node.dataset.target === id));
+        panels.forEach(panel => panel.classList.toggle('active', panel.id === id));
+      }
+      nodes.forEach(node => {
+        node.addEventListener('click', () => activate(node.dataset.target));
+      });
+      if (nodes.length) activate(nodes[0].dataset.target);
+    });
+  </script>
+</body>
+</html>
