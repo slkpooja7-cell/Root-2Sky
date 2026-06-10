@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Life</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top left, #ffd8b8 0%, transparent 24%),
+                  radial-gradient(circle at top right, #bfe8ff 0%, transparent 22%),
+                  linear-gradient(180deg, #f9fcff 0%, #f2f5ff 38%, #fff9f2 100%);
+      color: #1b1536;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '🎓📚🎒';
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      font-size: 2rem;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(255,243,229,0.9) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    header {
+      display: grid;
+      gap: 12px;
+      padding: 46px 20px 28px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    header h1 {
+      margin: 0;
+      font-size: clamp(2.6rem, 4vw, 3.6rem);
+      letter-spacing: -0.04em;
+      color: #34255a;
+    }
+    .subtitle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 1rem;
+      color: #5c4d79;
+      background: rgba(255,255,255,0.88);
+      border-radius: 999px;
+      padding: 10px 18px;
+      box-shadow: 0 10px 30px rgba(91, 68, 129, 0.12);
+      margin: 0 auto;
+      max-width: 560px;
+    }
+    .nav-links {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      font-size: 0.95rem;
+      color: #3b2c64;
+    }
+    .nav-links a {
+      color: #3b2c64;
+      text-decoration: none;
+      font-weight: 700;
+      background: rgba(255,255,255,0.86);
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(128, 98, 175, 0.18);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .nav-links a:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,1);
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto 34px;
+      padding: 0 20px;
+    }
+    .campus-map {
+      position: relative;
+      min-height: 680px;
+      margin-top: 24px;
+      border-radius: 36px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(245,241,255,0.92));
+      box-shadow: 0 30px 70px rgba(74, 56, 119, 0.12);
+      overflow: hidden;
+      padding: 48px;
+      display: grid;
+      place-items: center;
+    }
+    .campus-map::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(255,223,165,0.35) 0%, transparent 32%),
+        radial-gradient(circle at 82% 12%, rgba(206,235,255,0.45) 0%, transparent 24%),
+        radial-gradient(circle at 25% 82%, rgba(194,221,255,0.18) 0%, transparent 22%);
+      pointer-events: none;
+    }
+    .campus-map::after {
+      content: 'campus crew'
+      attr(data-tag);
+      position: absolute;
+      left: 22px;
+      bottom: 24px;
+      font-size: 5rem;
+      font-weight: 700;
+      color: rgba(57, 35, 102, 0.06);
+      pointer-events: none;
+    }
+    .center-hub {
+      position: relative;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: radial-gradient(circle at top, #fff6f2, #f7eeff 70%);
+      border: 8px solid rgba(111, 81, 170, 0.16);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      z-index: 2;
+      box-shadow: 0 18px 45px rgba(83, 52, 128, 0.14);
+      animation: float 6s ease-in-out infinite;
+    }
+    .center-hub strong {
+      display: block;
+      font-size: 1.25rem;
+      color: #382f61;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .center-hub span {
+      display: block;
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #605385;
+    }
+    .branch {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+    }
+    .branch::before {
+      content: '';
+      position: absolute;
+      width: 260px;
+      height: 6px;
+      background: linear-gradient(90deg, rgba(252,185,255,0.9), rgba(158,223,255,0.9));
+      border-radius: 999px;
+      top: 50%;
+      left: 50%;
+      transform-origin: left center;
+      opacity: 0.6;
+    }
+    .branch-academics { top: 6%; left: 50%; transform: translateX(-50%); }
+    .branch-academics::before { transform: translateX(-100%) rotate(-8deg); }
+    .branch-friends { top: 24%; right: 6%; }
+    .branch-friends::before { transform: translateX(-100%) rotate(-18deg); }
+    .branch-events { top: 56%; right: 6%; }
+    .branch-events::before { transform: translateX(-100%) rotate(18deg); }
+    .branch-skills { top: 76%; left: 38%; }
+    .branch-skills::before { transform: translateX(-100%) rotate(8deg); }
+    .branch-vibe { top: 56%; left: 6%; }
+    .branch-vibe::before { transform: translateX(-100%) rotate(-18deg); }
+    .campus-node {
+      position: relative;
+      width: 172px;
+      padding: 18px 16px;
+      border-radius: 32px;
+      background: rgba(255,255,255,0.96);
+      border: 1px solid rgba(129,98,190,0.16);
+      box-shadow: 0 20px 38px rgba(104,68,134,0.16);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+      z-index: 3;
+      pointer-events: auto;
+    }
+    .campus-node:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 28px 58px rgba(104,68,134,0.22);
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(244,238,255,0.96));
+    }
+    .campus-node .emoji {
+      font-size: 1.6rem;
+    }
+    .campus-node strong {
+      font-size: 0.98rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #3b2f62;
+    }
+    .campus-node .tip {
+      font-size: 0.77rem;
+      color: #6c5b8e;
+      opacity: 0.9;
+    }
+    .bubble-wall {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      align-items: end;
+      justify-items: center;
+      padding-bottom: 42px;
+      pointer-events: none;
+      gap: 20px;
+    }
+    .bubble {
+      width: 100%;
+      max-width: 640px;
+      min-height: 170px;
+      border-radius: 32px;
+      background: rgba(255,255,255,0.96);
+      border: 1px solid rgba(127,96,195,0.14);
+      box-shadow: 0 24px 52px rgba(76, 60, 122, 0.12);
+      padding: 24px 28px;
+      display: grid;
+      gap: 12px;
+      transform: translateY(18px);
+      opacity: 0;
+      transition: transform 0.35s ease, opacity 0.35s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .bubble.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .bubble .bubble-emoji {
+      font-size: 2.4rem;
+    }
+    .bubble strong {
+      font-size: 1.4rem;
+      color: #34255a;
+      margin: 0;
+    }
+    .bubble .line {
+      width: 60px;
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #d9b8ff, #b2dcff);
+    }
+    .bubble .phrase {
+      font-size: 1.02rem;
+      color: #564a76;
+      letter-spacing: 0.01em;
+    }
+    .campus-illustration {
+      position: absolute;
+      right: 16px;
+      bottom: 24px;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, #ffd7bb 0%, #ffb38d 55%, transparent 75%);
+      border-radius: 46% 54% 42% 58%;
+      filter: drop-shadow(0 14px 32px rgba(134, 86, 177, 0.16));
+      z-index: 0;
+    }
+    .campus-illustration::before,
+    .campus-illustration::after {
+      content: '';
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.6;
+    }
+    .campus-illustration::before { width: 56px; height: 56px; top: 14px; left: 20px; }
+    .campus-illustration::after { width: 42px; height: 42px; bottom: 18px; right: 18px; }
+    .footer {
+      text-align: center;
+      padding: 20px 16px 36px;
+      color: #5b4d7d;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @media (max-width: 840px) {
+      .campus-map { min-height: 760px; padding: 34px; }
+      .branch-academics, .branch-friends, .branch-events, .branch-skills, .branch-vibe, .branch-clubs { left: 50% !important; right: auto !important; transform: translateX(-50%); }
+      .branch-academics { top: 8%; }
+      .branch-friends { top: 26%; }
+      .branch-events { top: 44%; }
+      .branch-skills { top: 62%; }
+      .branch-vibe { top: 72%; }
+      .branch-clubs { top: 84%; }
+      .branch::before { width: 140px !important; transform: translateX(-100%) rotate(0deg) !important; }
+    }
+    @media (max-width: 620px) {
+      header { padding: 30px 16px 18px; }
+      .campus-map { min-height: 840px; padding: 24px; }
+      .campus-node { width: 100%; max-width: 220px; }
+      .campus-illustration { display: none; }
+      .bubble { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Campus Life 🎓</h1>
+    <div class="subtitle">interactive campus mind map</div>
+    <div class="nav-links">
+      <a href="homepage.html">Home</a>
+      <a href="goaltracker.html">Goal Tracker</a>
+      <a href="freshers road map .html">Road Map</a>
+      <a href="achievement wall.html">Achievement Wall</a>
+    </div>
+  </header>
+  <main>
+    <div class="campus-map">
+      <div class="center-hub">
+        <strong>Campus Hub</strong>
+        <span>tap a node</span>
+      </div>
+
+      <div class="branch branch-academics">
+        <div class="campus-node" data-target="bubble-academics">
+          <div class="emoji">📘</div>
+          <strong>Academics</strong>
+          <div class="tip">study glow</div>
+        </div>
+      </div>
+      <div class="branch branch-friends">
+        <div class="campus-node" data-target="bubble-friends">
+          <div class="emoji">🤝</div>
+          <strong>Friends</strong>
+          <div class="tip">find your crew</div>
+        </div>
+      </div>
+      <div class="branch branch-events">
+        <div class="campus-node" data-target="bubble-events">
+          <div class="emoji">🎉</div>
+          <strong>Events</strong>
+          <div class="tip">join the fun</div>
+        </div>
+      </div>
+      <div class="branch branch-skills">
+        <div class="campus-node" data-target="bubble-skills">
+          <div class="emoji">🛠️</div>
+          <strong>Skills</strong>
+          <div class="tip">level up</div>
+        </div>
+      </div>
+      <div class="branch branch-clubs">
+        <div class="campus-node" data-target="bubble-clubs">
+          <div class="emoji">🏫</div>
+          <strong>Clubs</strong>
+          <div class="tip">join groups</div>
+        </div>
+      </div>
+      <div class="branch branch-vibe">
+        <div class="campus-node" data-target="bubble-vibe">
+          <div class="emoji">✨</div>
+          <strong>Vibe</strong>
+          <div class="tip">feel the campus</div>
+        </div>
+      </div>
+
+      <div class="bubble-wall">
+        <div class="bubble active" id="bubble-academics">
+          <div class="bubble-emoji">🧠</div>
+          <strong>Study Spark</strong>
+          <div class="line"></div>
+          <div class="phrase">learn, relax, repeat.</div>
+        </div>
+        <div class="bubble" id="bubble-friends">
+          <div class="bubble-emoji">💬</div>
+          <strong>Friend Zone</strong>
+          <div class="line"></div>
+          <div class="phrase">meet, laugh, connect.</div>
+        </div>
+        <div class="bubble" id="bubble-events">
+          <div class="bubble-emoji">🎈</div>
+          <strong>Event Dash</strong>
+          <div class="line"></div>
+          <div class="phrase">party, explore, glow.</div>
+        </div>
+        <div class="bubble" id="bubble-skills">
+          <div class="bubble-emoji">🧩</div>
+          <strong>Skill Boost</strong>
+          <div class="line"></div>
+          <div class="phrase">create, code, craft.</div>
+        </div>
+        <div class="bubble" id="bubble-clubs">
+          <div class="bubble-emoji">🎯</div>
+          <strong>Club Pulse</strong>
+          <div class="line"></div>
+          <div class="phrase">team up, grow, lead.</div>
+        </div>
+        <div class="bubble" id="bubble-vibe">
+          <div class="bubble-emoji">🌟</div>
+          <strong>Good Vibes</strong>
+          <div class="line"></div>
+          <div class="phrase">chill, dream, shine.</div>
+        </div>
+      </div>
+      <div class="campus-illustration"></div>
+    </div>
+  </main>
+  <div class="footer">Campus Life | Cartoon Mind Map</div>
+  <script>
+    const nodes = document.querySelectorAll('.campus-node');
+    const bubbles = document.querySelectorAll('.bubble');
+    nodes.forEach(node => {
+      node.addEventListener('click', () => {
+        const target = node.dataset.target;
+        bubbles.forEach(bubble => {
+          bubble.classList.toggle('active', bubble.id === target);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
