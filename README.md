@@ -16,5 +16,5 @@ FEATURES:
 ## GitHub Repository:
 https://github.com/slkpooja7-cell/Root-2Sky 
 MISSION:
-to help the students gow from their roots to the sky by providing guidance,motivation,and tools for success.
+to help the students grow from their roots to the sky by providing guidance,motivation,and tools for success.
 CREATOR-  a vision by pooja.
