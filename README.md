@@ -6,6 +6,15 @@ FEATURES:
 # career and skill development support
 # academic growth planning
 # sky (AI-assistant)
+# technologies used 
+- HTML
+- CSS
+- JavaScript
+- GitHub pages
+- ## live demo:
+ https://slkpooja7-cell.github.io/Root-2Sky/
+## GitHub Repository:
+https://github.com/slkpooja7-cell/Root-2Sky 
 MISSION:
 to help the students gow from their roots to the sky by providing guidance,motivation,and tools for success.
 CREATOR-  a vision by pooja.
